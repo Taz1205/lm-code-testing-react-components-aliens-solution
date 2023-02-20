@@ -1,0 +1,10 @@
+export const SPECIES_NAME_MIN_LENGTH = 3;
+export const SPECIES_NAME_MAX_LENGTH = 23;
+
+export const PLANET_NAME_MIN_LENGTH = 2;
+export const PLANET_NAME_MAX_LENGTH = 49;
+
+export const REASON_SPARING_MIN_LENGTH = 17;
+export const REASON_SPARING_MAX_LENGTH = 153;
+
+export const NUMBER_OF_BEINGS_MIN_SIZE = 1000000000;

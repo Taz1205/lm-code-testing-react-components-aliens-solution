@@ -1,0 +1,12 @@
+:root {
+	--light: #fdf8e5;
+}
+
+body {
+	background-color: var(--light);
+	font-family: Arial, Helvetica, sans-serif;
+	line-height: 1.5;
+	display: flex;
+	justify-content: center;
+	margin: 0;
+}
