@@ -6,6 +6,8 @@ But it is a decent solution.
 
 👉 Take some time to explore this repo and understand the techniques being used.
 
+⚠️ We don't expect you to have used all the techniques shown here! They go beyond the instructions given in the assignment and some advanced TypeScript is used in places. But hopefully you can understand the approach and begin to integrate some of these techniques in your future projects.
+
 👉 Run the app with `npm install` and `npm start` and try out the form.
 
 👉 Notice the validation uses a `touched` flag to only display messages once the user has interacted with an input.
