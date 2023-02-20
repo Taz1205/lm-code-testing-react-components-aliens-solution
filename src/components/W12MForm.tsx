@@ -20,11 +20,16 @@ const defaultFormData: W12MFormData = {
 	twoPlusTwo: 'NOT_SELECTED',
 };
 
+// Note that there's not actually a lot of code here - it looks like more than it is thanks to
+// all the comments!
+
 const W12MForm = () => {
+	// 💡 We use a single object for all of our form data
 	const [formData, setFormData] = useState<W12MFormData>(defaultFormData);
 
-	const [submitted, setSubmitted] = useState(false);
-
+	// 💡 We also use a single onChangeHandler for EVERY input
+	// Don't be put off by the complex-looking generic below, look at the code first and we'll
+	// figure it out!
 	const onChangeHandler: W12FormChangeHandler = <
 		TKey extends keyof W12MFormData,
 		TValue extends W12MFormData[TKey]
@@ -33,10 +38,30 @@ const W12MForm = () => {
 		name: TKey
 	) => {
 		setSubmitted(false);
+		// 💡 We copy the old state
 		const newData: W12MFormData = { ...formData };
+
+		// 💡 Then we update the value for the named property. This is the line that requires
+		//    the complex-looking generic!
 		newData[name] = value;
+
+		//    	Let's understand the generic now! TypeScript needs to be sure that
+		//    	the set value is allowed to go in that property.
+
+		//    	1️⃣ This means that we need to know that `name` is a valid property on the form
+		//    	(so we can't do newData["banana"] because that's not a thing)
+		//    	👉 i.e. TKey must be a "keyof W12MFormData"
+
+		//		2️⃣ Secondly, the value must be allowed to go into that property
+		//			So we can't do newData["numberOfBeings"] = "agreiogjhoeag"
+		//		👉 i.e. TValue must be the type of W12MFormData which corresponds to the key
+		//			hence "TValue extends W12MFormData[TKey]"
+
+		// 💡 Finally we update state with the new value
 		setFormData(newData);
 	};
+
+	const [submitted, setSubmitted] = useState(false);
 
 	return (
 		<>
@@ -47,6 +72,7 @@ const W12MForm = () => {
 					setSubmitted(true);
 				}}>
 				<W12MHeader />
+				{/* 💡 Note how simple each input becomes to define! */}
 				<TextInput
 					id='speciesName'
 					type='text'
@@ -54,6 +80,7 @@ const W12MForm = () => {
 					value={formData.speciesName}
 					placeholder='Enter Species Name'
 					label='Species Name'
+					// 💡 Be sure to check out the validation code to understand how this works!
 					validate={validateSpeciesName}
 					onChangeHandler={onChangeHandler}
 				/>
