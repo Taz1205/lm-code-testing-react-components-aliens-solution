@@ -9,6 +9,8 @@ import {
 	noSpecialChars,
 } from './validation_rules';
 
+// 💡 This file tests that all of the ACTUAL validation logic actually works
+
 describe('validation_rules: maxLength', () => {
 	it('returns an error message if a string is too long', () => {
 		const fn = maxLength(2);

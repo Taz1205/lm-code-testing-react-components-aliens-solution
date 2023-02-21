@@ -9,7 +9,7 @@ import {
 import { DisplayW12Form } from './DisplayW12Form';
 import { SelectInput } from './inputs/Select';
 import { TextInput } from './inputs/TextInput';
-import { W12FormChangeHandler, W12MFormData } from './W12MForm.types';
+import { W12MFormChangeHandler, W12MFormData } from './W12MForm.types';
 import W12MHeader from './W12MHeader';
 
 const defaultFormData: W12MFormData = {
@@ -20,21 +20,16 @@ const defaultFormData: W12MFormData = {
 	twoPlusTwo: 'NOT_SELECTED',
 };
 
-// Note that there's not actually a lot of code here - it looks like more than it is thanks to
-// all the comments!
-
 const W12MForm = () => {
 	// 💡 We use a single object for all of our form data
 	const [formData, setFormData] = useState<W12MFormData>(defaultFormData);
 
 	// 💡 We also use a single onChangeHandler for EVERY input
-	// Don't be put off by the complex-looking generic below, look at the code first and we'll
-	// figure it out!
-	const onChangeHandler: W12FormChangeHandler = <
-		TKey extends keyof W12MFormData,
-		TValue extends W12MFormData[TKey]
+	//     See the definition of W12
+	const onChangeHandler: W12MFormChangeHandler = <
+		TKey extends keyof W12MFormData
 	>(
-		value: TValue,
+		value: W12MFormData[TKey],
 		name: TKey
 	) => {
 		setSubmitted(false);
@@ -42,20 +37,13 @@ const W12MForm = () => {
 		const newData: W12MFormData = { ...formData };
 
 		// 💡 Then we update the value for the named property. This is the line that requires
-		//    the complex-looking generic!
+		//    the complex-looking generic, as TypeScript needs to be sure that:
+		//    	1) newData[name] actually corresponds to a real property
+		//			(i.e. name must be a "keyof W12MFormData")
+		//		2)	"value" is a valid type to go into that property,
+		//			(i.e. the type of "value" must be W12MFormData[TKey] for that specific TKey)
+		//
 		newData[name] = value;
-
-		//    	Let's understand the generic now! TypeScript needs to be sure that
-		//    	the set value is allowed to go in that property.
-
-		//    	1️⃣ This means that we need to know that `name` is a valid property on the form
-		//    	(so we can't do newData["banana"] because that's not a thing)
-		//    	👉 i.e. TKey must be a "keyof W12MFormData"
-
-		//		2️⃣ Secondly, the value must be allowed to go into that property
-		//			So we can't do newData["numberOfBeings"] = "agreiogjhoeag"
-		//		👉 i.e. TValue must be the type of W12MFormData which corresponds to the key
-		//			hence "TValue extends W12MFormData[TKey]"
 
 		// 💡 Finally we update state with the new value
 		setFormData(newData);

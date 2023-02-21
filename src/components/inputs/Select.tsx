@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import ErrorMessage from '../ErrorMessage';
 import {
 	TwoPlusTwo,
-	W12FormChangeHandler,
+	W12MFormChangeHandler,
 	W12MFormData,
 } from '../W12MForm.types';
 
+// At the moment we only have one <Select> so we can be more restrictive here.
+// If we wanted to reuse this component for other dropdowns (which we probably would!)
+// we'd have to loosen the type of "value" to "string". For now it seems fine to be a little
+// more specific.
 type Option = { display: string; value: TwoPlusTwo };
 
+// very similar to the <TextInput> props - see comments there.
 export interface SelectProps {
 	id: string;
 	name: keyof W12MFormData;
 	options: Option[];
 	label: string;
 	value: string;
-	onChangeHandler: W12FormChangeHandler;
+	onChangeHandler: W12MFormChangeHandler;
 	validate: (value: string) => string[];
 }
 

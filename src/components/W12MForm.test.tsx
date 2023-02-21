@@ -27,6 +27,10 @@ describe('<W12MForm>', () => {
 	// We definitely COULD break this into a few smaller tests, test some additional form functionality
 	// ... but this test tests almost the entire form in one go, so ALONG WITH our other tests we can
 	// have confidence that the form is functioning and we'll know if any future changes break anything
+
+	// That said, in a perfect world we'd probably split this into multiple smaller tests here
+	// (one for each input)
+	// AND keep this test as a test of the whole form!
 	it('displays all entered values on submit', async () => {
 		render(<W12MForm />);
 

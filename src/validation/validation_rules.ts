@@ -1,3 +1,13 @@
+// 💡 Let's make all our validation functions have this pattern:
+//		If the input is invalid, return an error message
+//		If the input is valid, return undefined
+export type ValidationFunction = (value: string) => string | undefined;
+
+// 💡 Each of the rules below is a function which returns a ValidationFunction
+//		This means each rule can be re-used for different inputs.
+//		So one input can have maxLength(17) and another can have maxLength(23)
+//		These rules act as "factories" for the actual ValidationFunctions each input uses.
+
 export const maxLength = (max: number) => {
 	return (value: string) =>
 		value.length <= max

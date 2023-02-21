@@ -16,26 +16,25 @@ import {
 	mustNotBeNull,
 	noNumbers,
 	noSpecialChars,
+	ValidationFunction,
 } from './validation_rules';
 
 /* 
 
-💡 	Our validation functions are composed of smaller validation rules
-	This way we only have to write the actual logic ONCE, and we can test all those rules separately,
-	as seen in `validation_rules.ts` and `validation_rules.test.ts`
+💡 	Our validation functions are composed of an array of smaller validation rules.
+	
+	This way we only have to write the actual logic ONCE. See `validation_rules.ts` and `validation_rules.test.ts`
 
-	We could unit test these functions too, just checking that they return arrays with the required specification.
-
-	However, given how simple this API is, it seems valid to just SEE visually that the rules
-	as written for each input correspond perfectly the the specification. We've made our code match
-	the spec.
+	With this design, it's easy to visually see that the code matches the spec for each input.
 
 	This design also allows us to easily change the associated constants or mix/match rules on
-	future components - each time we write a new rule, that makes all future inputs more powerful
+	future components - each time we add a new rule, all inputs become more powerful
 	as they can opt into using that rule.
 
 */
 
+// 💡 Notice how it's extremely obvious what this function says about speciesName
+//    If the requirements change, we just have to edit the "rules" array!
 export const validateSpeciesName: (value: string) => string[] = (value) => {
 	const rules = [
 		minLength(SPECIES_NAME_MIN_LENGTH),
@@ -44,9 +43,7 @@ export const validateSpeciesName: (value: string) => string[] = (value) => {
 		noSpecialChars(),
 	];
 
-	return rules
-		.map((r) => r(value))
-		.filter((v) => v !== undefined) as string[];
+	return apply(rules, value);
 };
 
 export const validatePlanetName: (value: string) => string[] = (value) => {
@@ -56,9 +53,7 @@ export const validatePlanetName: (value: string) => string[] = (value) => {
 		noSpecialChars(),
 	];
 
-	return rules
-		.map((r) => r(value))
-		.filter((v) => v !== undefined) as string[];
+	return apply(rules, value);
 };
 
 export const validateReasonForSparing: (value: string) => string[] = (
@@ -70,23 +65,30 @@ export const validateReasonForSparing: (value: string) => string[] = (
 		noSpecialChars(),
 	];
 
-	return rules
-		.map((r) => r(value))
-		.filter((v) => v !== undefined) as string[];
+	return apply(rules, value);
 };
 
 export const validateNumberOfBeings: (value: string) => string[] = (value) => {
 	const rules = [mustBeNumeric(), minValue(NUMBER_OF_BEINGS_MIN_SIZE)];
 
-	return rules
-		.map((r) => r(value))
-		.filter((v) => v !== undefined) as string[];
+	return apply(rules, value);
 };
 
 export const validateTwoPlusTwo: (value: string) => string[] = (value) => {
 	const rules = [mustNotBeNull(), mustEqual('4')];
 
-	return rules
-		.map((r) => r(value))
-		.filter((v) => v !== undefined) as string[];
+	return apply(rules, value);
+};
+
+// 💡 This is just a convenience function to apply all of the rules
+const apply = (rules: ValidationFunction[], value: string) => {
+	return (
+		rules
+			// this passes the value to each rule and builds an array of the results
+			.map((r) => r(value))
+			// then we filter out any "undefined", i.e. we only keep any error messages
+			.filter(Boolean) as string[]
+	);
+	// because of the wobbly definition of .filter() we end up with an array of "any" 😔
+	// but we KNOW it's string[], so we use "as string[]" to retain the type information 🥳
 };
