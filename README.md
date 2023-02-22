@@ -16,11 +16,13 @@ But it is a decent solution.
 
 👉 Notice the _simple_ state. `useState` is only used 3 times!
 
-1️⃣ An object to hold the data for `W12MForm`
+1️. An object to hold the data for `W12MForm`
 
-2️⃣ A `boolean` flag to track if the submit button has been pressed
+2. A `boolean` flag to track if the submit button has been pressed
 
-3️⃣ A `boolean` flag to track if the user has touched each input
+3. A `boolean` flag to track if the user has touched each input
+
+---
 
 👀 There are _zero_ uses of `useEffect` - this app does not interact with the outside world!
 
